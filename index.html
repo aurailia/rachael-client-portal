@@ -70,10 +70,12 @@ body {
   font-size: 16px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-height: 100vh;
+  padding: 0;
 }
 
-.app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; width: 100%; max-width: 1180px; margin: 0 auto; box-shadow: 0 0 60px rgba(139,123,196,0.12); }
 
 /* ── TOP BAR ── */
 .topbar {
@@ -352,7 +354,7 @@ body.editing .aitem input[type=checkbox] { display: none; }
 /* ── ORACLE (three-card choose) ── */
 .oracle-stage { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
 .oracle-spread { display: flex; gap: 22px; justify-content: center; align-items: flex-start; margin: 14px auto 22px; flex-wrap: wrap; }
-.oc { position: relative; width: 200px; height: 300px; perspective: 1300px; cursor: pointer; transition: transform 0.3s, opacity 0.5s; }
+.oc { position: relative; width: 200px; height: 350px; perspective: 1300px; cursor: pointer; transition: transform 0.3s, opacity 0.5s; }
 .oc:hover:not(.chosen):not(.faded) { transform: translateY(-10px); }
 .oc.faded { opacity: 0.28; pointer-events: none; filter: saturate(0.6); transform: scale(0.94); }
 .oc.chosen { cursor: default; }
@@ -374,7 +376,7 @@ body.editing .aitem input[type=checkbox] { display: none; }
 .oc-face-img { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
 .oc-face-glyph { font-size: 52px; opacity: 0.8; position: relative; z-index: 1; }
 .oc-face-ph-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; font-style: italic; color: var(--purple-deep); margin-top: 10px; position: relative; z-index: 1; text-align: center; padding: 0 14px; line-height: 1.2; }
-.oc-face-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 2; }
+.oc-face-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }
 
 .oracle-hint { font-size: 14.5px; color: var(--text-mid); text-align: center; line-height: 1.6; margin-bottom: 6px; font-style: italic; }
 .oracle-reading { max-width: 580px; margin: 0 auto; opacity: 0; transform: translateY(10px); transition: all 0.5s 0.3s; }
