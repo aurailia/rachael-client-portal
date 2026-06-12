@@ -360,7 +360,8 @@ body.editing .aitem input[type=checkbox] { display: none; }
 /* ── ORACLE (three-card choose) ── */
 .oracle-stage { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
 .oracle-spread { display: flex; gap: 22px; justify-content: center; align-items: flex-start; margin: 14px auto 22px; flex-wrap: wrap; }
-.oc { position: relative; width: 200px; height: 350px; perspective: 1300px; cursor: pointer; transition: transform 0.3s, opacity 0.5s; }
+/* Card holds a 2:3 ratio to match the 1050 x 1500 px art exactly */
+.oc { position: relative; width: 200px; height: 300px; perspective: 1300px; cursor: pointer; transition: transform 0.3s, opacity 0.5s; }
 .oc:hover:not(.chosen):not(.faded) { transform: translateY(-10px); }
 .oc.faded { opacity: 0.28; pointer-events: none; filter: saturate(0.6); transform: scale(0.94); }
 .oc.chosen { cursor: default; }
