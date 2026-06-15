@@ -357,6 +357,15 @@ body.editing .aitem input[type=checkbox] { display: none; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--grad-teal); color: #fff; padding: 12px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; box-shadow: 0 6px 20px rgba(31,182,166,0.4); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ── HYPNOSIS AUDIO ── */
+.audio-card { background: var(--grad-soft); border: 1px solid var(--purple-border); border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.audio-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.audio-icon { width: 42px; height: 42px; border-radius: 50%; background: var(--grad-main); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; box-shadow: 0 2px 8px rgba(139,123,196,0.3); }
+.audio-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 700; font-style: italic; color: var(--purple-deep); line-height: 1.2; }
+.audio-sub { font-size: 13px; color: var(--text-mid); margin-top: 1px; }
+.audio-desc { font-size: 14.5px; color: var(--text); line-height: 1.7; margin: 4px 0 14px; }
+.audio-card audio { width: 100%; height: 42px; border-radius: 22px; }
+
 /* ── ORACLE (three-card choose) ── */
 .oracle-stage { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
 .oracle-spread { display: flex; gap: 22px; justify-content: center; align-items: flex-start; margin: 14px auto 22px; flex-wrap: wrap; }
@@ -671,6 +680,19 @@ body.editing .aitem input[type=checkbox] { display: none; }
         <h1 class="page-title">When Fear Hits</h1>
         <span class="page-title-accent"></span>
         <p class="panel-intro">For the moments it gets loud. Before you post, before you hit publish, when the old "who am I to do this" voice shows up. None of this means something is wrong. It means you're growing past an old version of yourself, and your body is catching up. Use whichever one fits the moment.</p>
+
+        <!-- SHARED HYPNOSIS AUDIO (every client gets this one). To add a client-specific audio, duplicate this block. -->
+        <div class="audio-card">
+          <div class="audio-head">
+            <div class="audio-icon"><i class="ti ti-headphones"></i></div>
+            <div>
+              <div class="audio-title">Safe to Be Seen</div>
+              <div class="audio-sub">Hypnosis &middot; find somewhere quiet, headphones on</div>
+            </div>
+          </div>
+          <p class="audio-desc">When the fear of being seen feels bigger than a tapping round can hold, put your headphones on and let this take you under. Lie back, close your eyes, and let your nervous system settle into safety. Don't listen while driving.</p>
+          <audio controls preload="none" src="https://dl.dropboxusercontent.com/scl/fi/s6gt72r4xagkfyjbbj5am/Hypnosis-for-overcoming-fear-of-being-seen.mp3?rlkey=sm6swiceog652s9delh5cx179&dl=1">Your browser doesn't support audio playback.</audio>
+        </div>
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">First, a 90-second ground</span><span class="sec-line"></span></div>
         <div class="card">
