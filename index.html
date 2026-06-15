@@ -357,6 +357,24 @@ body.editing .aitem input[type=checkbox] { display: none; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--grad-teal); color: #fff; padding: 12px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; box-shadow: 0 6px 20px rgba(31,182,166,0.4); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ── BREATHING CIRCLE ── */
+.breath-wrap { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
+.breath-stage { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; margin: 6px 0 18px; }
+.breath-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--purple-border); opacity: 0.55; }
+.breath-ring.r2 { inset: 26px; opacity: 0.4; }
+.breath-ring.r3 { inset: 52px; opacity: 0.3; }
+.breath-circle { position: relative; width: 120px; height: 120px; border-radius: 50%; background: var(--grad-main); box-shadow: 0 8px 30px rgba(139,123,196,0.4); display: flex; align-items: center; justify-content: center; transform: scale(0.62); transition: transform 0.4s ease; will-change: transform; }
+.breath-circle.run { transition: transform var(--phase-dur, 4s) cubic-bezier(0.42,0,0.58,1); }
+.breath-circle.big { transform: scale(1.12); }
+.breath-circle.small { transform: scale(0.62); }
+.breath-glow { position: absolute; inset: -18px; border-radius: 50%; background: radial-gradient(circle, rgba(169,155,214,0.45) 0%, rgba(169,155,214,0) 70%); opacity: 0; transition: opacity 0.6s; }
+.breath-circle.big .breath-glow { opacity: 1; }
+.breath-cue-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; font-style: italic; color: #fff; text-shadow: 0 1px 6px rgba(94,79,146,0.5); letter-spacing: 0.02em; z-index: 2; }
+.breath-count { position: absolute; bottom: -2px; font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 600; z-index: 2; }
+.breath-controls { display: flex; gap: 10px; align-items: center; }
+.breath-status { font-size: 14px; color: var(--text-mid); text-align: center; min-height: 20px; margin-top: 2px; font-style: italic; }
+.breath-rounds { font-size: 12.5px; color: var(--text-mid); margin-top: 4px; letter-spacing: 0.04em; }
+
 /* ── HYPNOSIS AUDIO ── */
 .audio-card { background: var(--grad-soft); border: 1px solid var(--purple-border); border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow); }
 .audio-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
@@ -694,19 +712,37 @@ body.editing .aitem input[type=checkbox] { display: none; }
           <audio controls preload="none" src="https://dl.dropboxusercontent.com/scl/fi/s6gt72r4xagkfyjbbj5am/Hypnosis-for-overcoming-fear-of-being-seen.mp3?rlkey=sm6swiceog652s9delh5cx179&dl=1">Your browser doesn't support audio playback.</audio>
         </div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">First, a 90-second ground</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Out of Flight-or-Fight Breathwork</span><span class="sec-line"></span></div>
         <div class="card">
           <p class="body-text">Do this before you post, before a call, before you open the site to look at it. It takes your nervous system out of fight-or-flight so you're working from calm, not panic.</p>
           <ul class="mini-list">
             <li>Both feet flat on the floor. Feel them. Press down gently.</li>
             <li>One hand on your heart, one on your belly. Let them rest there.</li>
-            <li>Breathe in for 4, hold for 4, out for 6. The long exhale is what signals safe. Do this four times.</li>
+            <li>Breathe in through your nose for 4, hold for 4, then out through your mouth for 6, lips soft like you're breathing through a straw. The long exhale is what signals safe. Do this four times.</li>
             <li>Say quietly: "I'm safe right now. Nothing here is an emergency."</li>
             <li>Drop your shoulders. Unclench your jaw. Now go do the thing.</li>
           </ul>
+
+          <div class="breath-wrap">
+            <div class="breath-stage">
+              <div class="breath-ring"></div>
+              <div class="breath-ring r2"></div>
+              <div class="breath-ring r3"></div>
+              <div class="breath-circle small" id="breathCircle">
+                <div class="breath-glow"></div>
+                <span class="breath-cue-text" id="breathCue">Ready</span>
+                <span class="breath-count" id="breathCount"></span>
+              </div>
+            </div>
+            <div class="breath-controls">
+              <button class="btn btn-grad" id="breathBtn" onclick="toggleBreath()"><i class="ti ti-player-play"></i> Start breathing</button>
+            </div>
+            <p class="breath-status" id="breathStatus">Four breaths. In through your nose, hold, out through your mouth like a straw. Follow the circle.</p>
+            <p class="breath-rounds" id="breathRounds"></p>
+          </div>
         </div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">How to tap</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">EFT Tapping</span><span class="sec-line"></span></div>
         <div class="card">
           <p class="body-text">EFT (tapping) calms the part of your brain that fires when you feel exposed. You tap gently with two fingers on each point while saying the words out loud. Say them even if you don't fully believe them yet. The point isn't to lie to yourself. It's to let your body hear the truth alongside the fear.</p>
           <p class="body-text">Tap each point 5 to 7 times as you say the line, moving through them in order. Each script has two rounds. The first round lets the fear speak, the second round turns it toward what's true. Notice where your fear sits on a scale of 1 to 10 before you start, then check again after both rounds.</p>
@@ -1054,6 +1090,72 @@ function switchOwner(name, el) {
   var sec = document.getElementById('owner-' + name);
   if (sec) sec.classList.add('active');
 }
+/* ═══════════ BREATHING CIRCLE (4 in · 4 hold · 6 out, x4) ═══════════ */
+var breathRunning = false, breathTimers = [], breathRound = 0;
+var BREATH_TOTAL = 4; // number of full breaths
+var BREATH_PHASES = [
+  { label: 'In through nose', dur: 4000, cls: 'big' },
+  { label: 'Hold',       dur: 4000, cls: 'big' },
+  { label: 'Out through straw',dur: 6000, cls: 'small' }
+];
+function breathClear() { breathTimers.forEach(clearTimeout); breathTimers = []; }
+function breathReset() {
+  breathClear(); breathRunning = false; breathRound = 0;
+  var c = document.getElementById('breathCircle');
+  if (c) { c.classList.remove('run','big'); c.classList.add('small'); c.style.removeProperty('--phase-dur'); }
+  setText('breathCue','Ready'); setText('breathCount','');
+  setText('breathStatus','Four breaths. In through your nose, hold, out through your mouth like a straw. Follow the circle.');
+  setText('breathRounds','');
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-player-play"></i> Start breathing';
+}
+function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
+function toggleBreath() {
+  if (breathRunning) { breathReset(); return; }
+  breathRunning = true; breathRound = 0;
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-player-stop"></i> Stop';
+  runBreathRound();
+}
+function runBreathRound() {
+  if (!breathRunning) return;
+  if (breathRound >= BREATH_TOTAL) { finishBreath(); return; }
+  breathRound++;
+  setText('breathRounds', 'Breath ' + breathRound + ' of ' + BREATH_TOTAL);
+  runPhase(0);
+}
+function runPhase(i) {
+  if (!breathRunning) return;
+  if (i >= BREATH_PHASES.length) { runBreathRound(); return; }
+  var p = BREATH_PHASES[i];
+  var c = document.getElementById('breathCircle');
+  setText('breathCue', p.label);
+  if (c) {
+    c.classList.add('run');
+    c.style.setProperty('--phase-dur', (p.dur/1000) + 's');
+    c.classList.remove('big','small');
+    void c.offsetWidth; // restart transition
+    c.classList.add(p.cls);
+  }
+  // simple countdown
+  var secs = Math.round(p.dur/1000), left = secs;
+  setText('breathCount', left + '');
+  var tick = setInterval(function(){
+    left--; if (left > 0) setText('breathCount', left + ''); else setText('breathCount','');
+  }, 1000);
+  breathTimers.push(setTimeout(function(){ clearInterval(tick); runPhase(i+1); }, p.dur));
+}
+function finishBreath() {
+  breathClear(); breathRunning = false;
+  var c = document.getElementById('breathCircle');
+  if (c) { c.classList.remove('run','big'); c.classList.add('small'); }
+  setText('breathCue','Settled'); setText('breathCount','');
+  setText('breathStatus','Notice how your body feels now. Softer, slower, more here. You can go do the thing.');
+  setText('breathRounds','');
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-refresh"></i> Again';
+}
+
 function toggleStep(card) { card.classList.toggle('open'); }
 
 /* ═══════════ EDITABLE TO-DO ═══════════ */
