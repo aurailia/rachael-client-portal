@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Portal · Bessie Estonactoc · Aurailia</title>
+<title>Your Portal · Rachael Maly · Aurailia</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
@@ -341,6 +341,24 @@ body.editing .aitem input[type=checkbox] { display: none; }
 .breath-cue i { color: var(--teal-deep); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 .breath-cue p { font-size: 14.5px; color: var(--teal-deep); line-height: 1.65; font-style: italic; }
 
+/* ── BREATHING CIRCLE ── */
+.breath-wrap { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
+.breath-stage { position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; margin: 6px 0 18px; }
+.breath-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--purple-border); opacity: 0.55; }
+.breath-ring.r2 { inset: 26px; opacity: 0.4; }
+.breath-ring.r3 { inset: 52px; opacity: 0.3; }
+.breath-circle { position: relative; width: 120px; height: 120px; border-radius: 50%; background: var(--grad-main); box-shadow: 0 8px 30px rgba(139,123,196,0.4); display: flex; align-items: center; justify-content: center; transform: scale(0.62); transition: transform 0.4s ease; will-change: transform; }
+.breath-circle.run { transition: transform var(--phase-dur, 4s) cubic-bezier(0.42,0,0.58,1); }
+.breath-circle.big { transform: scale(1.12); }
+.breath-circle.small { transform: scale(0.62); }
+.breath-glow { position: absolute; inset: -18px; border-radius: 50%; background: radial-gradient(circle, rgba(169,155,214,0.45) 0%, rgba(169,155,214,0) 70%); opacity: 0; transition: opacity 0.6s; }
+.breath-circle.big .breath-glow { opacity: 1; }
+.breath-cue-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; font-style: italic; color: #fff; text-shadow: 0 1px 6px rgba(94,79,146,0.5); letter-spacing: 0.02em; line-height: 1.15; z-index: 2; }
+.breath-count { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600; z-index: 2; }
+.breath-controls { display: flex; gap: 10px; align-items: center; }
+.breath-status { font-size: 14px; color: var(--text-mid); text-align: center; min-height: 20px; margin-top: 2px; font-style: italic; }
+.breath-rounds { font-size: 12.5px; color: var(--text-mid); margin-top: 4px; letter-spacing: 0.04em; }
+
 /* ── HYPNOSIS AUDIO ── */
 .audio-card { background: var(--grad-soft); border: 1px solid var(--purple-border); border-radius: var(--radius-sm); padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow); }
 .audio-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
@@ -366,9 +384,21 @@ body.editing .aitem input[type=checkbox] { display: none; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--grad-teal); color: #fff; padding: 12px 22px; border-radius: 22px; font-size: 14px; font-weight: 600; box-shadow: 0 6px 20px rgba(31,182,166,0.4); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 100; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* Aurailia reveal dot · tiny, low-key, bottom-right. Click to show the download button. */
+.reveal-dot { position: fixed; bottom: 16px; right: 16px; z-index: 95; width: 12px; height: 12px; border-radius: 50%; background: var(--purple-soft); opacity: 0.35; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
+.reveal-dot:hover { opacity: 0.7; transform: scale(1.15); }
+body.show-export .reveal-dot { opacity: 0.85; background: var(--purple); }
+/* Aurailia export button · floating, sits above the dot. Hidden until the dot is clicked. */
+.export-btn { position: fixed; bottom: 40px; right: 16px; z-index: 90; display: none; align-items: center; gap: 8px; background: var(--grad-main); color: #fff; border: none; padding: 11px 18px; border-radius: 22px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; box-shadow: 0 6px 20px rgba(139,123,196,0.4); transition: transform 0.14s, box-shadow 0.14s; opacity: 0.95; }
+body.show-export .export-btn { display: inline-flex; }
+.export-btn:hover { transform: translateY(-2px); opacity: 1; box-shadow: 0 8px 26px rgba(139,123,196,0.5); }
+.export-btn i { font-size: 17px; }
+@media (max-width: 760px) { .export-btn { bottom: 38px; right: 14px; padding: 10px 14px; font-size: 12.5px; } .reveal-dot { bottom: 14px; right: 14px; } }
+
 /* ── ORACLE (three-card choose) ── */
 .oracle-stage { display: flex; flex-direction: column; align-items: center; padding: 8px 0 4px; }
 .oracle-spread { display: flex; gap: 22px; justify-content: center; align-items: flex-start; margin: 14px auto 22px; flex-wrap: wrap; }
+/* Card holds a 2:3 ratio to match the 1050 x 1500 px art exactly */
 .oc { position: relative; width: 200px; height: 300px; perspective: 1300px; cursor: pointer; transition: transform 0.3s, opacity 0.5s; }
 .oc:hover:not(.chosen):not(.faded) { transform: translateY(-10px); }
 .oc.faded { opacity: 0.28; pointer-events: none; filter: saturate(0.6); transform: scale(0.94); }
@@ -438,12 +468,12 @@ body.editing .aitem input[type=checkbox] { display: none; }
 
   <!-- TOP BAR -->
   <div class="topbar">
-    <div class="avatar">BE</div>
+    <div class="avatar">RM</div>
     <div class="topbar-info">
-      <div class="topbar-name">Bessie Estonactoc</div>
+      <div class="topbar-name">Rachael Maly</div>
       <div class="topbar-meta">Your private portal with Aurailia <span class="dot">✦</span> updated after each call</div>
     </div>
-    <div class="topbar-badge">Soft launch this weekend<br>Next call June 23</div>
+    <div class="topbar-badge">New Wix Build<br>3 Service Buckets</div>
   </div>
 
   <div class="body">
@@ -493,38 +523,37 @@ body.editing .aitem input[type=checkbox] { display: none; }
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">You at a glance</span><span class="sec-line"></span></div>
         <div class="card">
-          <div class="drow"><span class="dlabel">Name</span><span class="dval">Bessie Estonactoc · Spiritual Mentor &amp; Hypnotherapist · former therapist of 20 years</span></div>
-          <div class="drow"><span class="dlabel">Current business</span><span class="dval">Be With Bessie · bewithbessie.com</span></div>
-          <div class="drow"><span class="dlabel">Current site</span><span class="dval">Moving from Strikingly to Wix · domain (bessieestonactoc.com) transferring over · VA onboarding to Wix</span></div>
-          <div class="drow"><span class="dlabel">What we're building</span><span class="dval">A full Wix site that builds the know, like and trust factor, then leads people gently to your $44 assessment call and into your programs</span></div>
-          <div class="drow"><span class="dlabel">Your goal</span><span class="dval">A real business, not a hobby. Booked weeks out with a waitlist, working 2 to 3 days a week, still loving it at 76, abundance in all forms</span></div>
+          <div class="drow"><span class="dlabel">Name</span><span class="dval">Rachael Maly, LPC, ATR-BC</span></div>
+          <div class="drow"><span class="dlabel">Current business</span><span class="dval">Art &amp; Soul Counseling (becomes the name for your therapy bucket)</span></div>
+          <div class="drow"><span class="dlabel">Current site</span><span class="dval">On Squarespace now. We're rebuilding on Wix with a new personal-name domain.</span></div>
+          <div class="drow"><span class="dlabel">What we're building</span><span class="dval">One home for your whole practice across three buckets, with a paid assessment call as the way in</span></div>
+          <div class="drow"><span class="dlabel">Your goal</span><span class="dval">Work that feels alive, on 2 to 3 client-facing days a week, with income that isn't all tied to weekly sessions</span></div>
         </div>
 
-        <!-- buckets/focus areas -->
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">The three ways people work with you</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Your three buckets</span><span class="sec-line"></span></div>
         <div class="card">
-          <div class="body-text">Everything we build leads to one of three doorways, all of them starting with a $44 assessment call so the right people raise their hand first.</div>
+          <div class="body-text">We're organizing everything you do into three clear paths, so the right person can land on your site and know straight away which one is for her. Your modalities live inside these, not scattered across a long menu.</div>
           <div style="margin-top:16px;">
-            <div class="niche-box"><p>Quantum Journeys Hypnosis. A single session at $333 with an integration call, or a one-month container at $777 with three sessions plus coaching. For the person ready to go to the level where the pattern actually lives.</p></div>
-            <div class="niche-box"><p>The A.R.T. of Spiritual Living. Your three-month container of 1:1 coaching and hypnotherapy, for the four real reasons people come to you: a relationship, finding their purpose, trusting their intuition, or launching their healing business.</p></div>
-            <div class="niche-box"><p>The Portal. Your chakra journey group program, opening to a "Coming This Summer" waitlist for the next cohort. The gather-your-people container your design is most built for.</p></div>
+            <div class="niche-box"><p>Space and Environment. The outer work. Online consulting for the spaces people live and work in.</p></div>
+            <div class="niche-box"><p>Art &amp; Soul Therapy. The inner work, under your Art &amp; Soul name, with two paths: art therapy and talk therapy.</p></div>
+            <div class="niche-box"><p>Coaching and Personal Growth. Inner to outer. The bucket that isn't under your therapy license.</p></div>
           </div>
         </div>
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">The person you're building for</span><span class="sec-line"></span></div>
         <div class="card">
           <div class="card-label">Your soulmate client</div>
-          <div class="blockquote"><p>A spiritually awake woman in her 50s and beyond who has done the work, knows she's intuitive, and is finally done overriding her own knowing. She's sick and tired of being sick and tired of the old beliefs about herself. She's ready to release the victim story for good, trust her abilities, and live from the guidance that's been there all along, with meaning and integrity.</p></div>
+          <div class="blockquote"><p>A deep-feeling woman in her 30s or 40s who has done years of therapy, knows her patterns, and still keeps repeating them. She's the one who holds everyone together and she's exhausted by it. She misses the creative part of herself. She doesn't want more information. She wants something to actually shift.</p></div>
           <div class="body-text" style="margin-top:16px;">When you write, when you post, when you build a page, picture her. She's who everything is for.</div>
         </div>
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">What matters most right now</span><span class="sec-line"></span></div>
         <div class="top4">
           <div class="top4-head">Your top priorities</div>
-          <div class="top4-item"><div class="top4-num">1</div><div><div class="top4-text">Connect Zoom to Wix Bookings and transfer your domain from Strikingly to Wix. These two are the gating items before we go live.</div><div class="top4-owner">Yours · before launch</div></div></div>
-          <div class="top4-item"><div class="top4-num">2</div><div><div class="top4-text">Finish the soft-launch polish: assessment-call section, ocean wave hero, portal-doorway service cards, testimonials, certifications, Hawaiian name mention, footer disclaimer.</div><div class="top4-owner">Mine · by end of weekend</div></div></div>
-          <div class="top4-item"><div class="top4-num">3</div><div><div class="top4-text">Pivot The Portal page to a "Coming This Summer" waitlist, and set the Quantum Journeys page to show your single session and one-month container.</div><div class="top4-owner">Mine · by end of weekend</div></div></div>
-          <div class="top4-item"><div class="top4-num">4</div><div><div class="top4-text">VA work: back up your Strikingly content into Google Docs before the transfer, and import your contacts into Wix. Then send your first newsletter promoting the $44 call the week after launch.</div><div class="top4-owner">Yours + your VA</div></div></div>
+          <div class="top4-item"><div class="top4-num">1</div><div><div class="top4-text">Finish your payment and onboarding form so I can start the brand kit and wireframe, then tell me which bucket you want to build first</div><div class="top4-owner">Yours</div></div></div>
+          <div class="top4-item"><div class="top4-num">2</div><div><div class="top4-text">I build the new Wix site, add you as co-owner, and set up the three-bucket structure</div><div class="top4-owner">Mine</div></div></div>
+          <div class="top4-item"><div class="top4-num">3</div><div><div class="top4-text">I set up the paid assessment call as the one clear next step on every page, with the 48-hour booking credit</div><div class="top4-owner">Mine</div></div></div>
+          <div class="top4-item"><div class="top4-num">4</div><div><div class="top4-text">You get answers on the three licensing questions: testimonials, mixing coaching with therapy, and malpractice coverage for the new services</div><div class="top4-owner">Yours</div></div></div>
         </div>
       </div>
 
@@ -541,26 +570,26 @@ body.editing .aitem input[type=checkbox] { display: none; }
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Your chart</span><span class="sec-line"></span></div>
         <div class="card">
-          <div class="drow"><span class="dlabel">Type</span><span class="dval">Generator</span></div>
-          <div class="drow"><span class="dlabel">Profile</span><span class="dval">2/4 — Hermit / Opportunist</span></div>
-          <div class="drow"><span class="dlabel">Authority</span><span class="dval">Sacral — your truth comes as a gut response, a yes or no in your body, before your mind catches up</span></div>
-          <div class="drow"><span class="dlabel">Strategy</span><span class="dval">To Respond — wait for the gut yes before you initiate</span></div>
-          <div class="drow"><span class="dlabel">Incarnation Cross</span><span class="dval">Right Angle Cross of Rulership (26/45 | 47/22)</span></div>
-          <div class="drow"><span class="dlabel">Defined centres</span><span class="dval">Sacral · Spleen</span></div>
+          <div class="drow"><span class="dlabel">Type</span><span class="dval">Manifesting Generator</span></div>
+          <div class="drow"><span class="dlabel">Profile</span><span class="dval">3/6 · the Martyr and the Role Model</span></div>
+          <div class="drow"><span class="dlabel">Authority</span><span class="dval">Sacral · your body knows yes or no before your mind does. Trust the gut response.</span></div>
+          <div class="drow"><span class="dlabel">Strategy</span><span class="dval">Wait to respond, inform the people around you, then move</span></div>
+          <div class="drow"><span class="dlabel">Incarnation Cross</span><span class="dval">Right Angle Cross of the Vessel of Love · Gates 10, 15, 46, 25</span></div>
+          <div class="drow"><span class="dlabel">Defined centres</span><span class="dval">Throat, G, Sacral, Spleen</span></div>
         </div>
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Your wealth codes</span><span class="sec-line"></span></div>
         <div class="card">
-          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Sustained energy that goes the distance.</strong> Your defined Sacral is renewable life-force when the work is a true gut yes. You can hold long containers, deep sessions, and intensives without burning out. The leak is taking obligation clients. Every reluctant yes costs you more than the fee. Build your offers around the work that lights you up.</div></div>
-          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Instinctive knowing that creates uncanny results.</strong> Your defined Spleen is present-moment intuition that fires before the mind. This is the "she just knew" quality your clients can't quite name and refer others over. The leak is second-guessing it. Trust the first hit. Your analytical mind can evaluate after.</div></div>
-          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>The community that builds itself.</strong> Your 2/4 profile plus Gate 45 means you're built to gather people around shared purpose, not broadcast to strangers. Group programs like The Portal and your Spiritual Authority Circle are your natural income structure. Warm people convert. Cold traffic is a layer on top, never the foundation.</div></div>
-          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>The depth that cannot be replicated.</strong> 20 years as a therapist, plus hypnotherapy, channeling, Sacred Deathcare, and walking your own parents to the threshold. Most practitioners work one layer. You hold four. The leak is hiding that behind a generic list of modalities. Lead with the specific transformation and let your depth be seen.</div></div>
+          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Your felt presence.</strong> People feel held in your presence before you say much. That isn't a technique, it's who you are in the room. We price your deeper work for that depth, not by the hour.</div></div>
+          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Your integration.</strong> Almost no one holds what you hold. Art therapy, Imago, IFS, Brainspotting, yoga, Reiki, in one practice. We lead with the whole experience, not a list of methods. That's your moat.</div></div>
+          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Your story.</strong> Your 33-13 channel makes your story your strongest pull. The honest version of your transition, not the polished one, is what draws your people in.</div></div>
+          <div class="wcode"><span class="wcode-dot">✦</span><div><strong>Your rhythmic depth.</strong> Immersive work gives you energy back instead of draining it. Concentrated, deep, then complete. That's where your best and most sustainable income lives.</div></div>
         </div>
 
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Who you are through your design</span><span class="sec-line"></span></div>
         <div class="card">
-          <p class="body-text">You're a Generator with a 2/4 profile and Sacral Authority, a practitioner genuinely built to work, but only in response to what lights you up. Your 2nd line carries gifts so natural to you that people are drawn to <em>you</em> specifically. Jen, Kimber, Lisa and Jamel didn't come for a technique, they came for you. Your 4th line means your business grows through warm relationships and community, not cold reach. Sacred solitude isn't a luxury for you, it's a design requirement.</p>
-          <p class="body-text">The Right Angle Cross of Rulership is your soul-level assignment: teaching people to govern themselves from the inside out, to put down the victim story and live from their own spiritual authority. Gate 26 makes your message land when you're grounded in the value of your work. Gate 45, the Gatherer, is why group containers like The Portal and the Spiritual Authority Circle aren't add-ons, they're the income structure your design is most built for. Gate 47 turns your hypnotherapy and your words into the click moments clients have circled for years. Gate 22 is the graceful openness that makes your Sacred Deathcare work irreplaceable, because you can sit at the threshold without flinching. Your defined Sacral and Spleen together are the rare pairing behind your uncanny attunement and your ability to hold deep work without depletion. We build everything around being the deepest, not the loudest.</p>
+          <p class="body-text">You're wired for depth and variety at the same time, which is why your range of work was never the problem. The weekly insurance-session model has been a long, quiet no from your body, and that's most of why you've felt so drained. Your gut already knows which work lights you up. We're going to build around that signal instead of overriding it.</p>
+          <p class="body-text">Your cross is the Vessel of Love, so your whole life is structured around holding people and making room for real connection. That's exactly why intensives and retreats aren't just a nice idea for you, they're your actual wealth frequency. And your 3/6 profile means every pivot you've made is the credibility, not a detour. You're meant to be seen building this, out loud, as you go.</p>
         </div>
       </div>
 
@@ -598,16 +627,16 @@ body.editing .aitem input[type=checkbox] { display: none; }
           <span class="edit-hint"><i class="ti ti-hand-finger" style="vertical-align:middle;"></i> Tap a status pill to cycle it: Done, In progress, Not started, Waiting on you</span>
         </div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Foundation &amp; setup</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Getting set up</span><span class="sec-line"></span></div>
         <div class="card" id="prog-start"></div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Brand &amp; voice</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Brand kit</span><span class="sec-line"></span></div>
         <div class="card" id="prog-brand"></div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Website build</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Your Wix website</span><span class="sec-line"></span></div>
         <div class="card" id="prog-website"></div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Launch &amp; beyond</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Assessment call and launch</span><span class="sec-line"></span></div>
         <div class="card" id="prog-call"></div>
       </div>
 
@@ -631,42 +660,42 @@ body.editing .aitem input[type=checkbox] { display: none; }
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">1</div><div class="step-title">Show your face, no words needed</div><span class="step-day">Day 1</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>Post one story. Just you. In your sacred space, your reading nook, the garden, or mid-day with a cup of tea. No caption pressure, no teaching. A few words over the top if you want: "A quiet morning before sessions begin." That's it.</p>
+            <p>Post one story. Just you. In your studio, out in nature, mid-paint, or at your desk. No caption pressure, no teaching. A few words over the top if you want: "Morning in the studio." That's it.</p>
             <p>The goal today isn't engagement. It's letting your body feel what it's like to be visible and have it be completely fine.</p>
           </div>
         </div>
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">2</div><div class="step-title">Name one thing you believe</div><span class="step-day">Day 2</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>One short post or story. A single thing you know to be true from your work. Something like: "You are not the victim of your story. You have the power within you to make change through choice."</p>
+            <p>One short post or story. A single thing you know to be true from your work. Something like: "The most self-aware people I work with are often the most stuck. Knowing why you do something lives in a different place than changing it."</p>
             <p>No call to action. No selling. You're just letting people hear how you think. This is how your soulmate client starts to recognize you.</p>
           </div>
         </div>
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">3</div><div class="step-title">Share a piece of your story</div><span class="step-day">Day 3</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>This is often your strongest move. Your 2/4 profile means people are drawn to your lived experience, not a polished tip. Share one honest moment from your own path. The version you don't usually say out loud.</p>
-            <p>Maybe the moment you walked one of your own parents to the threshold, or the day you left 20 years as a therapist to trust the work you do now. Keep it real, not polished. People come for the truth, not the highlight reel.</p>
+            <p>This is often your strongest move. You're a 3/6, and you're in the middle of a real transition, so your story carries weight other people's tips never will. Share one honest moment from your own path. The version you don't usually say out loud.</p>
+            <p>Maybe the day you realized the weekly session model was quietly draining you, even though you love the work. Keep it real, not polished. People come for the truth, not the highlight reel.</p>
           </div>
         </div>
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">4</div><div class="step-title">Mirror the person you help</div><span class="step-day">Day 4</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>Write directly to her. The intuitive woman who is sick and tired of being sick and tired of the old beliefs about herself, who senses her guides but doesn't quite trust what she hears. Name what that's like so precisely she feels seen.</p>
-            <p>Something like: "You already know the answer. You feel it in your gut before your mind talks you out of it. The work isn't getting more intuitive. It's finally trusting the knowing that's been there all along." Let her feel that you get it.</p>
+            <p>Write directly to her. The deep-feeling woman who has done years of therapy, understands her patterns, and still keeps repeating them. Name what that's like so precisely she feels seen.</p>
+            <p>Something like: "You've had the same conversation with your partner more times than you can count. You both know your parts. Nothing changes. That isn't a failure of insight. It's a sign the work needs to go somewhere talk can't reach." Let her feel that you get it.</p>
           </div>
         </div>
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">5</div><div class="step-title">Show your work in motion</div><span class="step-day">Day 5</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>A glimpse behind the scenes. Your hypnotherapy chair, a candle lit before a session, your notes after a quantum journey, the red roses that remind you of your mother. A short note on what one part of your method actually does, in plain language.</p>
+            <p>A glimpse behind the scenes. Your art materials, a piece in progress, the space you work in, a walk in nature where a session happens. A short note on what one part of your method actually does, in plain language. Why a brush can reach what words can't.</p>
             <p>You're not explaining your whole method. You're letting people feel the texture of working with you.</p>
           </div>
         </div>
         <div class="step-card" onclick="toggleStep(this)">
           <div class="step-head"><div class="step-num">6</div><div class="step-title">Open a small door</div><span class="step-day">Day 6</span><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
-            <p>First soft invitation. No big launch. Just let people know there's a way in. Once your assessment call is live, this becomes: "If something here is landing, I have a $44 assessment call where we look at what's actually going on for you, and it credits toward whatever you book next. Comment or message me and I'll send the details."</p>
+            <p>First soft invitation. No big launch. Just let people know there's a way in. Once your assessment call is live, this becomes: "If something here is landing, I have a paid assessment call where we look at what's actually going on for you and whether we're a fit. Comment or message me and I'll send the details."</p>
             <p>Until that's ready, point them to your current way of working or simply invite a conversation in your messages.</p>
           </div>
         </div>
@@ -719,19 +748,37 @@ body.editing .aitem input[type=checkbox] { display: none; }
           <audio controls preload="none" src="https://dl.dropboxusercontent.com/scl/fi/s6gt72r4xagkfyjbbj5am/Hypnosis-for-overcoming-fear-of-being-seen.mp3?rlkey=sm6swiceog652s9delh5cx179&dl=1">Your browser doesn't support audio playback.</audio>
         </div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">First, a 90-second ground</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Out of Flight-or-Fight Breathwork</span><span class="sec-line"></span></div>
         <div class="card">
           <p class="body-text">Do this before you post, before a call, before you open something that makes you nervous. It takes your nervous system out of fight-or-flight so you're working from calm, not panic.</p>
           <ul class="mini-list">
             <li>Both feet flat on the floor. Feel them. Press down gently.</li>
             <li>One hand on your heart, one on your belly. Let them rest there.</li>
-            <li>Breathe in for 4, hold for 4, out for 6. The long exhale is what signals safe. Do this four times.</li>
+            <li>Breathe in through your nose for 4, hold for 4, then out through your mouth for 6, lips soft like you're breathing through a straw. The long exhale is what signals safe. Do this four times.</li>
             <li>Say quietly: "I'm safe right now. Nothing here is an emergency."</li>
             <li>Drop your shoulders. Unclench your jaw. Now go do the thing.</li>
           </ul>
+
+          <div class="breath-wrap">
+            <div class="breath-stage">
+              <div class="breath-ring"></div>
+              <div class="breath-ring r2"></div>
+              <div class="breath-ring r3"></div>
+              <div class="breath-circle small" id="breathCircle">
+                <div class="breath-glow"></div>
+                <span class="breath-cue-text" id="breathCue">Ready</span>
+                <span class="breath-count" id="breathCount"></span>
+              </div>
+            </div>
+            <div class="breath-controls">
+              <button class="btn btn-grad" id="breathBtn" onclick="toggleBreath()"><i class="ti ti-player-play"></i> Start breathing</button>
+            </div>
+            <p class="breath-status" id="breathStatus">Four breaths. In through your nose, hold, out through your mouth like a straw. Follow the circle.</p>
+            <p class="breath-rounds" id="breathRounds"></p>
+          </div>
         </div>
 
-        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">How to tap</span><span class="sec-line"></span></div>
+        <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">EFT Tapping</span><span class="sec-line"></span></div>
         <div class="card">
           <p class="body-text">EFT (tapping) calms the part of your brain that fires when you feel exposed. You tap gently with two fingers on each point while saying the words out loud. Say them even if you don't fully believe them yet. The point isn't to lie to yourself. It's to let your body hear the truth alongside the fear.</p>
           <p class="body-text">Tap each point 5 to 7 times as you say the line, moving through them in order. Each script has two rounds. The first round lets the fear speak, the second round turns it toward what's true. Notice where your fear sits on a scale of 1 to 10 before you start, then check again after both rounds.</p>
@@ -776,37 +823,37 @@ body.editing .aitem input[type=checkbox] { display: none; }
           </div>
         </div>
 
-        <!-- ════ SCRIPT 5: COMPARISON SPIRAL ════ -->
+        <!-- ════ SCRIPT 3: NEW WEBSITE LAUNCH ════ -->
         <div class="step-card" onclick="toggleStep(this)">
-          <div class="step-head"><div class="step-num">✦</div><div class="step-title">For the comparison spiral &middot; "everyone's ahead of me"</div><i class="ti ti-chevron-down step-toggle"></i></div>
+          <div class="step-head"><div class="step-num">✦</div><div class="step-title">For launching the new website &middot; "what if it flops again"</div><i class="ti ti-chevron-down step-toggle"></i></div>
           <div class="step-body" onclick="event.stopPropagation()">
             <div class="fear-note">
               <div class="fear-note-label">About this fear</div>
-              <p>This is the one that hits when you open Instagram and see someone doing something close to what you do, looking further along, more polished, more booked. Your chest tightens and you start second-guessing everything you were about to post, so you post nothing. Comparison isn't proof you're behind. It's just your brain measuring your inside against someone else's outside. Use this when the scroll has knocked you off center and you need to come back to your own path.</p>
+              <p>This is the one that lives in your body from the last time you put something out and heard nothing back. It hurt, and now part of you braces for that silence again, so you might want to keep your new site quiet just in case. The difference this time is real. This wasn't guessed at. It was built from who you actually are. Use this in the days around your site going live, or any time the memory of a quiet launch tightens your chest.</p>
             </div>
             <div class="round-label">Round one &middot; let it speak</div>
-            <div class="setup-box"><div class="setup-label">Setup &middot; tap the side of your hand, say 3 times</div><div class="setup-text">Even though I keep comparing myself to everyone else and feeling like I'm behind, I deeply love and accept myself anyway.</div></div>
-            <div class="tap-row"><span class="tap-point">Eyebrow</span><span class="tap-words">This tightness when I see what everyone else is doing.</span></div>
-            <div class="tap-row"><span class="tap-point">Side of eye</span><span class="tap-words">They look so much further along than me.</span></div>
-            <div class="tap-row"><span class="tap-point">Under eye</span><span class="tap-words">More polished. More booked. More sure of themselves.</span></div>
-            <div class="tap-row"><span class="tap-point">Under nose</span><span class="tap-words">So I freeze. I second-guess. I post nothing.</span></div>
-            <div class="tap-row"><span class="tap-point">Chin</span><span class="tap-words">Maybe I missed something everyone else figured out.</span></div>
-            <div class="tap-row"><span class="tap-point">Collarbone</span><span class="tap-words">This ache of feeling behind.</span></div>
-            <div class="tap-row"><span class="tap-point">Under arm</span><span class="tap-words">I'm comparing my inside to their outside.</span></div>
-            <div class="tap-row"><span class="tap-point">Top of head</span><span class="tap-words">I honor that part of me just wants to belong and be enough.</span></div>
+            <div class="setup-box"><div class="setup-label">Setup &middot; tap the side of your hand, say 3 times</div><div class="setup-text">Even though I've launched before and it hurt when no one came, and part of me is bracing for that again, I deeply love and accept myself anyway.</div></div>
+            <div class="tap-row"><span class="tap-point">Eyebrow</span><span class="tap-words">I remember launching before and hearing nothing back.</span></div>
+            <div class="tap-row"><span class="tap-point">Side of eye</span><span class="tap-words">It shattered something in me.</span></div>
+            <div class="tap-row"><span class="tap-point">Under eye</span><span class="tap-words">I don't want to feel that again.</span></div>
+            <div class="tap-row"><span class="tap-point">Under nose</span><span class="tap-words">So part of me wants to keep this site hidden, just in case.</span></div>
+            <div class="tap-row"><span class="tap-point">Chin</span><span class="tap-words">My body is bracing for the silence.</span></div>
+            <div class="tap-row"><span class="tap-point">Collarbone</span><span class="tap-words">That fear makes sense. It's trying to protect me from hurting again.</span></div>
+            <div class="tap-row"><span class="tap-point">Under arm</span><span class="tap-words">I honor how much I poured in last time.</span></div>
+            <div class="tap-row"><span class="tap-point">Top of head</span><span class="tap-words">It's safe to feel this fear and keep going.</span></div>
             <div class="breath-cue"><i class="ti ti-wind"></i><p>Take a deep breath in, and slowly let it out.</p></div>
             <div class="round-label">Round two &middot; turn it toward truth</div>
-            <div class="setup-box"><div class="setup-label">Setup &middot; tap the side of your hand, say 3 times</div><div class="setup-text">Even though the spiral feels real, I'm on my own timeline, and I choose to come back to my own path.</div></div>
-            <div class="tap-row"><span class="tap-point">Eyebrow</span><span class="tap-words">Their highlight reel isn't their whole story.</span></div>
-            <div class="tap-row"><span class="tap-point">Side of eye</span><span class="tap-words">I have no idea what it took them to get there.</span></div>
-            <div class="tap-row"><span class="tap-point">Under eye</span><span class="tap-words">There's no one else who does it exactly the way I do.</span></div>
-            <div class="tap-row"><span class="tap-point">Under nose</span><span class="tap-words">My people are looking for me, not a copy of someone else.</span></div>
-            <div class="tap-row"><span class="tap-point">Chin</span><span class="tap-words">I'm not behind. I'm on my own timeline.</span></div>
-            <div class="tap-row"><span class="tap-point">Collarbone</span><span class="tap-words">Their success doesn't take anything from mine.</span></div>
-            <div class="tap-row"><span class="tap-point">Under arm</span><span class="tap-words">I can close the app and come back to my work.</span></div>
-            <div class="tap-row"><span class="tap-point">Top of head</span><span class="tap-words">I trust my path. I have something only I can give.</span></div>
+            <div class="setup-box"><div class="setup-label">Setup &middot; tap the side of your hand, say 3 times</div><div class="setup-text">Even though it didn't work before, I'm doing this differently now, and I choose to share my work anyway.</div></div>
+            <div class="tap-row"><span class="tap-point">Eyebrow</span><span class="tap-words">This time I'm not guessing.</span></div>
+            <div class="tap-row"><span class="tap-point">Side of eye</span><span class="tap-words">This was built from who I actually am.</span></div>
+            <div class="tap-row"><span class="tap-point">Under eye</span><span class="tap-words">This site finally reflects me. It's allowed to be seen.</span></div>
+            <div class="tap-row"><span class="tap-point">Under nose</span><span class="tap-words">One quiet response doesn't mean my work doesn't matter.</span></div>
+            <div class="tap-row"><span class="tap-point">Chin</span><span class="tap-words">I'm proud of what I built. That pride is mine no matter what.</span></div>
+            <div class="tap-row"><span class="tap-point">Collarbone</span><span class="tap-words">The right people are out there looking for exactly this.</span></div>
+            <div class="tap-row"><span class="tap-point">Under arm</span><span class="tap-words">I'm not doing this alone this time.</span></div>
+            <div class="tap-row"><span class="tap-point">Top of head</span><span class="tap-words">I share my work with an open heart and trust the right people will find it.</span></div>
             <div class="breath-cue"><i class="ti ti-wind"></i><p>Take a deep breath in, and slowly let it out. Tune into how you feel now.</p></div>
-            <div class="mantra">I'm not behind. I'm on my own path, and there's room for exactly what I bring.</div>
+            <div class="mantra">This is me, and it's magnetic. I built it from my truth, and the right people will feel it.</div>
           </div>
         </div>
 
@@ -880,8 +927,8 @@ body.editing .aitem input[type=checkbox] { display: none; }
         <div class="sec-head"><span class="sec-icon">✦</span><span class="sec-title">Latest update</span><span class="sec-line"></span></div>
         <div class="card">
           <div class="note-entry">
-            <div class="note-date">✦ Friday, June 5, 2026</div>
-            <div class="note-text">We're almost there, Bessie. The plan is to soft-launch your full Wix site by the end of the weekend, with your first newsletter going out the week after to promote the $44 assessment call.<br><br>Two things are in your hands before we go live, and they're the only things holding us back: connect Zoom inside Wix Bookings so your client links generate automatically, and transfer your domain from Strikingly over to Wix so you don't lose access. Once those are done, you can stop paying for Strikingly for good.<br><br>Here's the launch philosophy I want you to hold onto: the site does not have to be 100% perfect to go live. As long as people can find you and book, you can start promoting. We're routing every path, Quantum Journeys, The A.R.T. of Spiritual Living, and The Portal, through that one $44 assessment call first, so the right people raise their hand and you get to feel into who's a yes. The credit applies toward whatever they book.<br><br>On my end this weekend: I'm adding the assessment-call section to your homepage, building the ocean wave hero, turning your service cards into portal doorways with a path leading in, adding the pink feather with the gold glow on the dark sections, fixing the Read My Story button, cleaning up your testimonials with Jen, Kimber, Lisa and Jamel, and adding your three featured certifications plus a touch of your Hawaiian name. The Portal page becomes a "Coming This Summer" waitlist, and Quantum Journeys shows your two booking options.<br><br>Have your VA copy your Strikingly content into Google Docs as a backup before the transfer, and import your existing contacts into Wix. Then the week after we launch, you send that first newsletter. Next call is June 23. You're so close.</div>
+            <div class="note-date">✦ Our planning call</div>
+            <div class="note-text">This was a big one. We landed on the shape of your whole business, and it finally matches how you actually work.<br><br>We're organizing everything into three buckets: Space and Environment, Art &amp; Soul Therapy with art and talk paths underneath it, and Coaching and Personal Growth. Your Art &amp; Soul name stays, but now it lives over the therapy bucket specifically, while your new personal-name domain holds the whole practice. Your modalities stop being a long menu and become the how inside each path.<br><br>We're moving you to Wix so your scheduling, payments, email, digital products, blog, and your services link page all live in one place instead of five different tools. I'll build the site, add you as co-owner, then hand it over once you're settled in. We build it one page at a time, starting with whichever bucket feels clearest to you, so you can begin promoting before the whole thing is finished.<br><br>The other shift I love: we're replacing the free discovery call with a paid assessment call, around twenty five to forty five dollars, framed like a first appointment with a specialist. It filters out the free-advice seekers and brings you people who are actually ready. If they book within forty eight hours, they get a credit toward what they book. That call becomes the one clear next step on every page.<br><br>A few things are sitting with you to confirm before we go fully live, and they matter: how testimonials work under your licenses, whether mixing coaching and therapy with the same person is a dual-relationship issue in Texas, and whether your malpractice covers the new services. None of that blocks the build, we just want it sorted before launch.<br><br>Your next move is small and clear. Finish the payment and the onboarding form, then tell me which bucket to build first. That's it. I've got the rest.<br><br>One scheduling note: we moved our call to Tuesday at 5:30 PM your time. Our first one is tomorrow. See you then.</div>
           </div>
         </div>
 
@@ -897,6 +944,12 @@ body.editing .aitem input[type=checkbox] { display: none; }
 
 <div class="toast" id="toast">Saved ✦</div>
 
+<!-- AURAILIA TOOLS · the dot reveals the download button. Client would never notice it. -->
+<div class="reveal-dot" id="revealDot" onclick="toggleExport()" title="Aurailia tools"></div>
+<button class="export-btn" id="exportBtn" onclick="exportPortal()" title="Download an HTML copy with the current checkmarks, tasks, and statuses baked in">
+  <i class="ti ti-download"></i> Download HTML
+</button>
+
 <script>
 /* ═══════════════════════════════════════════════════════════════
    PER-CLIENT SETUP  ·  change these for each client
@@ -907,53 +960,51 @@ body.editing .aitem input[type=checkbox] { display: none; }
    3. DEFAULT_PROGRESS: their build phases and starting statuses.
    Everything else (styles, scripts, behavior) stays the same.
    ═══════════════════════════════════════════════════════════════ */
-var CLIENT_KEY = 'aurailia_portal_bessie';
+var CLIENT_KEY = 'aurailia_portal_rachael';
 
 /* ───────── TO-DO DATA ─────────
    section = group heading, badge = optional pill (or ''), items = array of strings */
 var DEFAULT_TODO = {
   mine: [
-    { section: 'New this week', badge: '', items: [
-      'Check the California disclaimer form on Wix',
-      'Finish the A.R.T. of Spiritual Living confirmation email',
-      'Finish the Quantum Journeys Hypnosis one-month container confirmation email'
+    { section: 'Start here', badge: 'FIRST', items: [
+      'Complete your payment using the link and coupon I sent',
+      'Fill out the onboarding form (it arrives right after payment)',
+      'Tell me which bucket to build first: Space, Art & Soul Therapy, or Coaching',
+      'Download Voxer and connect with me for quick between-call messages'
     ]},
-    { section: 'Before we launch', badge: 'URGENT', items: [
-      'Connect Zoom inside Wix Bookings (Video Conferencing Account settings) so client links generate automatically',
-      'Transfer your domain from Strikingly to Wix (Settings → Domain → Add Existing Domain → Connect a Domain You Already Own)',
-      'Set your business hours in Wix Bookings'
+    { section: 'Content and assets', badge: '', items: [
+      'Write up the first service page: what it is, who it is for, the offerings, formats, and pricing',
+      'Send me your About copy (you can pull from your current site) or a few notes for a fresh version',
+      'Gather your current logo and any photos you want me to work from'
     ]},
-    { section: 'With your VA', badge: '', items: [
-      'Have your VA copy your Strikingly content (About, A.R.T., T&Cs, Privacy) into Google Docs as a backup before the transfer',
-      'Have your VA import your existing contacts into Wix (Customers & Leads → Contacts → Import)',
-      'Save your Acuity intake forms to Google Docs, then cancel Acuity'
+    { section: 'Licensing to check', badge: 'IMPORTANT', items: [
+      'Confirm how you can collect testimonials under your LPC and art therapy licenses',
+      'Check whether mixing coaching and therapy with the same client is a dual-relationship issue in Texas',
+      'Call your malpractice provider to confirm coverage for online space consulting and coaching'
     ]},
-    { section: 'After we go live', badge: '', items: [
-      'Send your first newsletter promoting the $44 assessment call (the week after launch)',
-      'Review the Meet Bessie content for the homepage and About page and tell me what to change',
-      'Decide whether you want an intro video on your About page',
-      'Send me your chakra quiz link and your current email signature'
+    { section: 'When you are ready', badge: '', items: [
+      'Choose your new personal-name domain (I will tell you when to buy it)',
+      'Start having a look at Pinterest as a channel for your art and your work'
     ]}
   ],
   aurailia: [
-    { section: 'On now · soft-launch polish', badge: 'THIS WEEKEND', items: [
-      'Add the assessment-call section to the homepage and link all three service paths to the $44 booking',
-      'Build the ocean wave hero video and the portal-doorway service cards',
-      'Add the pink feather with gold glow on the dark sections, parallax on banners',
-      'Fix the Read My Story button and clean up the testimonial card styling',
-      'Add your three featured certifications and a brief Hawaiian name mention',
-      'Add the medical disclaimer to the footer'
+    { section: 'On now', badge: 'IN PROGRESS', items: [
+      'Set up our recurring Tuesday call (5:30 PM your time, first one tomorrow)',
+      'Create the Wix site and add you as co-owner',
+      'Set up your portal and keep it current after each call'
     ]},
-    { section: 'Page updates', badge: '', items: [
-      'Pivot The Portal page to "Coming This Summer" with a waitlist email capture',
-      'Update the Quantum Journeys page to show the single session and one-month container',
-      'Set the testimonial carousel to auto-cycle',
-      'Confirm the Quantum Journeys confirmation email and intake form are configured in Wix'
+    { section: 'Building for you', badge: '', items: [
+      'Brand kit: colors, typography, imagery, and symbols from your onboarding form',
+      'Three to four logo concepts for your personal-name brand',
+      'Wireframe of the full three-bucket site for you to review',
+      'Your first Work With Me page, with the booking set up behind it',
+      'The paid assessment call page, confirmation email, and post-call offer page',
+      'Your Linktree-style services page inside Wix, plus the blog'
     ]},
-    { section: 'Sent your way', badge: '', items: [
-      'Your Business Alignment Blueprint link',
-      'The Embody Wealth School link',
-      'The meeting summary doc'
+    { section: 'Setup and checks', badge: '', items: [
+      'Add the footer disclaimer (not diagnosing, not claiming to heal)',
+      'Review your Instagram bio and send you notes',
+      'Look into whether your domain and LLC name not matching causes any issue'
     ]}
   ]
 };
@@ -965,28 +1016,37 @@ var DEFAULT_TODO = {
    cards in Tab 4. Relabel the headings in the HTML to match. */
 var DEFAULT_PROGRESS = {
   start: [
-    ['Move from Strikingly to Wix Business plan', 'inprog'],
-    ['Connect Zoom to Wix Bookings', 'pending'],
-    ['Transfer domain Strikingly → Wix', 'pending'],
-    ['Import contacts into Wix', 'notstart']
+    ['Business alignment session', 'done'],
+    ['Payment for the build', 'pending'],
+    ['Onboarding form', 'pending'],
+    ['Voxer connected', 'notstart'],
+    ['Recurring Tuesday call set up (5:30 PM your time)', 'notstart'],
+    ['Your portal', 'inprog']
   ],
   brand: [
-    ['Brand Kit v2 + Brand Board PDF', 'done'],
-    ['Logo refresh (cursive · loops · infinity · purple)', 'done'],
-    ['Voice and copy guidelines locked', 'done']
+    ['Colors and typography', 'notstart'],
+    ['Logo concepts for your personal brand', 'notstart'],
+    ['Final logo', 'notstart'],
+    ['Brand kit delivered', 'notstart']
   ],
   website: [
-    ['Homepage build', 'inprog'],
-    ['Assessment-call section + service paths linked', 'inprog'],
-    ['Ocean wave hero + portal-doorway cards', 'inprog'],
-    ['The Portal page → "Coming This Summer" waitlist', 'inprog'],
-    ['Quantum Journeys page → two booking options', 'inprog'],
-    ['Testimonials, certifications, footer disclaimer', 'inprog']
+    ['Wix site created, you added as co-owner', 'notstart'],
+    ['New personal-name domain', 'notstart'],
+    ['Wireframe and three-bucket nav', 'notstart'],
+    ['First Work With Me page', 'pending'],
+    ['Homepage with video hero and mega menu', 'notstart'],
+    ['About page', 'notstart'],
+    ['Remaining bucket and sub-pages', 'notstart'],
+    ['Events and Workshops page', 'notstart'],
+    ['Blog and services link page', 'notstart'],
+    ['Privacy, terms, and footer disclaimer', 'notstart']
   ],
   call: [
-    ['Soft launch the full site', 'notstart'],
-    ['First newsletter promoting the $44 call', 'notstart'],
-    ['Next call · June 23', 'pending']
+    ['Paid assessment call booking page', 'notstart'],
+    ['Automated confirmation email', 'notstart'],
+    ['Post-call offer page', 'notstart'],
+    ['48-hour booking credit', 'notstart'],
+    ['Payments connected and tested', 'notstart']
   ]
 };
 
@@ -1030,6 +1090,72 @@ function switchOwner(name, el) {
   var sec = document.getElementById('owner-' + name);
   if (sec) sec.classList.add('active');
 }
+/* ═══════════ BREATHING CIRCLE (4 in · 4 hold · 6 out, x4) ═══════════ */
+var breathRunning = false, breathTimers = [], breathRound = 0;
+var BREATH_TOTAL = 4; // number of full breaths
+var BREATH_PHASES = [
+  { label: 'In through nose', dur: 4000, cls: 'big' },
+  { label: 'Hold',       dur: 4000, cls: 'big' },
+  { label: 'Out through straw',dur: 6000, cls: 'small' }
+];
+function breathClear() { breathTimers.forEach(clearTimeout); breathTimers = []; }
+function breathReset() {
+  breathClear(); breathRunning = false; breathRound = 0;
+  var c = document.getElementById('breathCircle');
+  if (c) { c.classList.remove('run','big'); c.classList.add('small'); c.style.removeProperty('--phase-dur'); }
+  setText('breathCue','Ready'); setText('breathCount','');
+  setText('breathStatus','Four breaths. In through your nose, hold, out through your mouth like a straw. Follow the circle.');
+  setText('breathRounds','');
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-player-play"></i> Start breathing';
+}
+function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
+function toggleBreath() {
+  if (breathRunning) { breathReset(); return; }
+  breathRunning = true; breathRound = 0;
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-player-stop"></i> Stop';
+  runBreathRound();
+}
+function runBreathRound() {
+  if (!breathRunning) return;
+  if (breathRound >= BREATH_TOTAL) { finishBreath(); return; }
+  breathRound++;
+  setText('breathRounds', 'Breath ' + breathRound + ' of ' + BREATH_TOTAL);
+  runPhase(0);
+}
+function runPhase(i) {
+  if (!breathRunning) return;
+  if (i >= BREATH_PHASES.length) { runBreathRound(); return; }
+  var p = BREATH_PHASES[i];
+  var c = document.getElementById('breathCircle');
+  setText('breathCue', p.label);
+  if (c) {
+    c.classList.add('run');
+    c.style.setProperty('--phase-dur', (p.dur/1000) + 's');
+    c.classList.remove('big','small');
+    void c.offsetWidth; // restart transition
+    c.classList.add(p.cls);
+  }
+  // simple countdown
+  var secs = Math.round(p.dur/1000), left = secs;
+  setText('breathCount', left + '');
+  var tick = setInterval(function(){
+    left--; if (left > 0) setText('breathCount', left + ''); else setText('breathCount','');
+  }, 1000);
+  breathTimers.push(setTimeout(function(){ clearInterval(tick); runPhase(i+1); }, p.dur));
+}
+function finishBreath() {
+  breathClear(); breathRunning = false;
+  var c = document.getElementById('breathCircle');
+  if (c) { c.classList.remove('run','big'); c.classList.add('small'); }
+  setText('breathCue','Settled'); setText('breathCount','');
+  setText('breathStatus','Notice how your body feels now. Softer, slower, more here. You can go do the thing.');
+  setText('breathRounds','');
+  var b = document.getElementById('breathBtn');
+  if (b) b.innerHTML = '<i class="ti ti-refresh"></i> Again';
+}
+
 function toggleStep(card) { card.classList.toggle('open'); }
 
 var todoData = load('todo', null) || JSON.parse(JSON.stringify(DEFAULT_TODO));
@@ -1192,84 +1318,84 @@ var CARD_BACKS = ['images/card-back-1.png', 'images/card-back-2.png', 'images/ca
 
 var ORACLE_DECK = [
   { name: 'The Witness', essence: 'You are allowed to be seen', glyph: '👁', image: 'images/01-witness.png',
-    why: 'You drew this because part of you is ready to be seen and part of you is still bracing. As a 2/4, your gifts are so natural to you that you forget they are gifts, so being seen for them feels exposing. The card came to soften the bracing.',
-    message: 'Your 2nd line is the natural. The talent is so built-in you barely notice it, which is exactly why people are drawn to you and not a technique. Twenty years of therapy, hypnotherapy, channeling, sitting at the threshold. That whole path is not a mess to hide, it is the credibility itself. Let yourself be called out and seen.',
+    why: 'You drew this because part of you is ready to be seen and part of you is still bracing. The card came to tell you the bracing can soften now.',
+    message: 'Your whole path, every version you have tried, is not a mess to hide. It is the credibility itself. People connect with the woman who is honest about the journey, not the polished expert. Let yourself be seen mid-build.',
     practice: 'Share one real, unpolished moment from where you actually are today.' },
   { name: 'The Slow Yes', essence: 'Your timing is not late', glyph: '🌙', image: 'images/02-slow-yes.png',
-    why: 'You pulled this because you have been measuring yourself against a clock that was never yours. As a Generator, your design is to respond, not to push ahead of your own gut. The card came to slow you down on purpose.',
-    message: 'You are not behind. You are a Generator, built to wait for the thing to show up and feel the sacral yes rise before you move. The slower season is not a delay, it is your strategy working. Forced initiation drains you. The right yes renews you. Let the wave finish before you decide what it means.',
+    why: 'You pulled this because somewhere you have been measuring yourself against a clock that was never yours. The card came to slow you down on purpose.',
+    message: 'You are not behind. You are moving at the pace your body trusts. The slower season you are in is not a delay, it is the foundation setting. Let the wave finish before you decide what it means.',
     practice: 'Let one thing take the time it needs instead of forcing the pace today.' },
   { name: 'The Vessel', essence: 'You hold more than you show', glyph: '🏺', image: 'images/03-vessel.png',
-    why: 'This found you because you have wondered if you are too many things. With Gate 22 and your open centres, you carry a wide range of frequency, and it can feel scattered. The card came to settle it.',
-    message: 'You are not scattered. Therapist, hypnotherapist, channeler, deathcare guide. These are not separate businesses, they are one vessel. The Cross of Rulership is the through-line: teaching people to govern themselves from the inside out. Stop cutting parts of yourself away to look focused. Integration, not subtraction, is your path.',
+    why: 'This found you because you have wondered if you are too many things. The card came to settle it.',
+    message: 'You are not scattered. The many gifts you hold are not separate businesses. They are one vessel. Stop trying to cut parts of yourself away to look focused. Integration, not subtraction, is your path.',
     practice: 'Name the one thread that quietly connects everything you do.' },
   { name: 'The Worth', essence: 'Say the number', glyph: '💎', image: 'images/04-worth.png',
-    why: 'You drew this because there is a price or an ask sitting in your throat right now. Your Throat is open, so old voices about money can feel louder there than your own. The card came to help you say it.',
-    message: 'Gate 26 is the Egoist, the gate that knows the true value of what it carries and is not shy to name it. Your worth was never up for debate. The tightness around money is old conditioning moving through an open centre, not your truth. What you offer carries real depth, and the right people meet your number without flinching. Let your price be a clear yes.',
+    why: 'You drew this because there is a price or an ask sitting in your throat right now. The card came to help you say it.',
+    message: 'Your value was never up for debate. The tightness you feel around money is old, not true. What you offer carries depth, and the right people meet that without flinching. Let your price be a clear yes.',
     practice: 'Say your price out loud, alone, until your voice stops wavering.' },
   { name: 'The Return', essence: 'Come home to yourself', glyph: '🕊', image: 'images/05-return.png',
-    why: 'This came through because you have been building from borrowed strategy, and your sacral feels the friction. It is calling you home to your own authority.',
-    message: 'You have spent enough time trying to fit a shape that was never yours, often shapes picked up through your open centres from louder voices. The card calls you back to your sacral authority, the yes and no that lives in your gut before your mind argues. Build from what your body confirms, and watch how much lighter the work becomes.',
+    why: 'This came through because you have been building from borrowed strategy, and a quiet part of you feels the friction. It is calling you home.',
+    message: 'You have spent enough time trying to fit a shape that was never yours. The card calls you back to your own frequency. Build from what is true for you, and watch how much lighter the work becomes.',
     practice: 'Drop one thing you have been doing because you thought you should.' },
   { name: 'The Maker', essence: 'Your creativity is the gift', glyph: '🎨', image: 'images/06-maker.png',
-    why: 'You pulled this because the creative part of you has been waiting behind the logistics. Your sacral lights up for the work that is a true yes, and it has been starved. It wants back in.',
-    message: 'You are a Generator. Your energy is renewable, but only when the work is a genuine gut yes. The part of you that makes, that feels, that works through depth and image, is not separate from your business. It is the fuel. Let the maker lead today and feel your sacral come back online.',
+    why: 'You pulled this because the creative part of you has been waiting behind the logistics. It wants back in.',
+    message: 'The part of you that makes, that feels, that works through color and image and depth, is not separate from your business. It is the heart of it. Let the maker lead today and watch your energy come back.',
     practice: 'Create one small thing for the joy of it, with no outcome attached.' },
   { name: 'The Threshold', essence: 'You are mid-becoming', glyph: '🚪', image: 'images/07-threshold.png',
-    why: 'This found you mid-change, in that unfamiliar in-between. Gate 22 gives you the grace to stand at thresholds others flinch from. The card came to tell you to keep walking through.',
-    message: 'You are standing in the doorway between who you were and who you are growing into. Gate 22, your Openness, is the same gift that lets you sit with the dying and the grieving without looking away. Turn it on yourself now. The strange feeling is just the size of the change, not a sign it is wrong. Keep walking.',
+    why: 'This found you mid-change, in that unfamiliar in-between. The card came to tell you to keep walking through.',
+    message: 'You are standing in the doorway between who you were and who you are growing into. It feels unfamiliar because it is new, not because it is wrong. Keep walking. The strange feeling is just the size of the change.',
     practice: 'Speak about the version of you on the other side as if she is already here.' },
   { name: 'The Rest', essence: 'Stillness is part of the work', glyph: '🌿', image: 'images/08-rest.png',
-    why: 'You drew this because some part of you is tired and has been calling it laziness. As a 2/4, solitude is not indulgence, it is a design requirement. The card came to reframe the rest you actually need.',
-    message: 'Your 2nd line needs the hermit cave. You recharge alone, and you are meant to. A Generator who ignores the empty sacral and pushes anyway ends up frustrated and depleted. The card gives you permission to let the field go quiet and trust things are growing underneath. Your worth is not measured by the grind.',
+    why: 'You drew this because some part of you is tired and has been calling it laziness. The card came to reframe the rest you actually need.',
+    message: 'Not everything is meant to be pushed. The card gives you permission to stop, to let the field go quiet, to trust that things are growing under the surface. Your worth is not measured by how hard you grind.',
     practice: 'Take one true pause today with nothing to produce from it.' },
   { name: 'The Mirror', essence: 'Your people recognize you', glyph: '🪞', image: 'images/09-mirror.png',
-    why: 'This came through because you have been trying to convince instead of being clear. Your 4th line builds through real relationship, not broadcast. The card came to remind you your people already recognize you.',
-    message: 'Your 4th line means your business grows through warmth and connection, through the people who already know you and the ones they send. When you speak from your truth, the right ones feel it before they understand it. Jen, Kimber, Lisa, Jamel. They came for you. You do not have to convince. Be clear, and let them come.',
+    why: 'This came through because you have been trying to convince instead of being clear. The card came to remind you your people already recognize you.',
+    message: 'When you speak from your truth, the right ones feel it before they understand it. You do not have to convince anyone. Be clear enough that the people meant for you can see themselves in you. Then let them come.',
     practice: 'Write one sentence so clear that your exact person would feel seen by it.' },
   { name: 'The Root', essence: 'Build from the ground', glyph: '🌳', image: 'images/10-root.png',
-    why: 'You pulled this because the unglamorous foundation work has tested your patience. Your Root is an open centre, so pressure to hurry can feel relentless. The card came to tell you the foundation matters more than the quick win.',
-    message: 'That pressure to rush, to get it all done now, is your open Root amplifying a stress that is not even yours to carry. Before the bloom comes the root. The foundation you are laying now is what lets everything later actually hold. You do not have to move at the speed the pressure demands. Trust the structure. It is making you unshakeable.',
+    why: 'You pulled this because the unglamorous foundation work has tested your patience. The card came to tell you it matters more than the quick win.',
+    message: 'Before the bloom comes the root. The foundation you are laying now is what lets everything you grow later actually hold. Trust the structure. It is not slowing you down, it is making you unshakeable.',
     practice: 'Tend one foundational thing you have been skipping past.' },
   { name: 'The Flame', essence: 'Let yourself want it', glyph: '🔥', image: 'images/11-flame.png',
     why: 'This found you because there is something you want that you have kept small. The card came to give you permission to want it out loud.',
-    message: 'Desire is not something to apologize for. The card asks you to stop dimming what you actually want, a real business and not a hobby, booked weeks out, a waitlist, still doing this work you love at 76. That vision is not too much. It is a sacral signal pointing you toward the life that is yours to build. Let yourself want it.',
+    message: 'Desire is not something to apologize for. The card asks you to stop dimming what you actually want. Your big vision is not too much. It is a signal pointing you toward the life that is yours to build.',
     practice: 'Say out loud the thing you want but have been afraid to claim.' },
   { name: 'The Offering', essence: 'Receiving is allowed', glyph: '🤲', image: 'images/12-offering.png',
     why: 'You drew this because you give so easily and receive so carefully. The card came to turn that around and let something good land.',
-    message: 'You give out in every session, often past the time, often past what you charged. Twenty years of pouring into others. Let it come back. Receive the support, the money, the help, without bracing for the catch. A Generator who only gives and never lets the sacral be replenished burns out. You are allowed to be held by what you built.',
+    message: 'You give out in every session, often past the time, often past what you charged. Let it come back. Receive the support, the money, the help, without bracing for the catch. You are allowed to be held by what you built.',
     practice: 'Accept one thing today without deflecting or over-explaining.' },
   { name: 'The Unhurried', essence: 'Depth over speed', glyph: '🌊', image: 'images/13-unhurried.png',
-    why: 'This came through because you have felt pressure to go faster and wider when your real gift is depth. Your defined Spleen and Sacral are built for deep, sustained work. The card came to release you from the race.',
-    message: 'You are not built for the fast, shallow version of this. Gate 47 turns confusion into realization, the click moment clients wait years for, and that does not happen at scale. Your gift is depth, and depth keeps its own time. Go deep with the few who are meant for you, and let that be more than enough.',
+    why: 'This came through because you have felt pressure to go faster and wider when your real gift is depth. The card came to release you from that race.',
+    message: 'You are not built for the fast, shallow version of this. Your gift is depth, and depth takes its own time. Go deep with the few who are meant for you, and let that be more than enough.',
     practice: 'Choose depth over reach in one decision today.' },
   { name: 'The Voice', essence: 'Stop editing yourself', glyph: '🗝', image: 'images/14-voice.png',
-    why: 'You pulled this because you water yourself down right before you share. Your Throat is open, which can make you second-guess how you sound. The card came to tell you the unedited version is the magnetic one.',
-    message: 'You smooth yourself into something safe right before you publish, certain the real you is too much. That doubt is your open Throat, not the truth. Your weird, your depth, your channeled knowing, that is the part that draws your people. As a 2nd line, the natural you is the magnetic one. Let it through unedited.',
+    why: 'You pulled this because you water yourself down right before you share. The card came to tell you the unedited version is the magnetic one.',
+    message: 'You smooth yourself into something safe right before you hit publish, certain the real you is too much. It is not. Your weird, your depth, your truth, that is the part that draws your people. Let it through.',
     practice: 'Post something today without softening or editing it first.' },
   { name: 'The Tender', essence: 'Be gentle with the scared part', glyph: '🫧', image: 'images/15-tender.png',
-    why: 'This found you because a younger, scared part of you has been loud lately. Your open centres absorb the fear in the room and amplify it, so some of what you feel was never yours. The card came to meet that part with gentleness.',
-    message: 'The fear that rises before you are seen is not your enemy, and some of it is not even yours, it is conditioning your open centres picked up long ago. You meet it the way you meet a frightened client. Hand on your heart, a breath, and you move forward with it riding gently alongside you.',
+    why: 'This found you because a younger, scared part of you has been loud lately. The card came to meet that part with gentleness instead of force.',
+    message: 'The fear that rises before you are seen is not your enemy. It is a part of you that once needed protecting. You meet it. Hand on your heart, a breath, and you move forward with it riding alongside you.',
     practice: 'Put a hand on your heart and tell the scared part it is safe now.' },
   { name: 'The Compass', essence: 'Your body already knows', glyph: '🧭', image: 'images/16-compass.png',
-    why: 'You drew this because you have been waiting for your mind to feel sure before you move. With Sacral Authority and a defined Spleen, your mind is the last place your truth shows up. The card came to point you back to your body.',
-    message: 'Your authority is sacral, and your Spleen knows in the moment. Your truth does not arrive as a clear thought, it arrives as a gut response, a quick yes or no, or a spleen hit you feel once and only once. Stop waiting to feel mentally certain, your open Ajna may never give you that. Feel the answer rise in your body, and trust it.',
+    why: 'You drew this because you have been waiting for your mind to feel sure before you move. The card came to point you back to your gut.',
+    message: 'Your truth does not always arrive as a clear thought. It arrives as a response in your body, a quick yes or no, before your mind catches up. Stop waiting to feel mentally certain. Feel the answer rise, and trust it.',
     practice: 'Make one decision today straight from your gut, before you analyze it.' },
   { name: 'The Bloom', essence: 'Quiet is not nothing', glyph: '🌸', image: 'images/17-bloom.png',
-    why: 'This came through because the quiet response has felt like a verdict. Your 2/4 grows through warm word of mouth, which is slower and quieter than broadcast, but deeper. The card came to tell you the seeds are still becoming.',
-    message: 'You have shown up and heard little back, and it stung. But your network builds the 4th-line way, person telling person, long before anyone comments. People watch you for a long time before they reach out. Every honest post is planting something in someone who is not ready to speak yet. Keep going. One day the field has bloomed.',
+    why: 'This came through because the quiet response has felt like a verdict. The card came to tell you the seeds are still becoming.',
+    message: 'You have shown up and heard little back, and it has stung. But people watch you long before they reach out. Every honest post is planting something. Keep going. One day you look up and the field has bloomed.',
     practice: 'Show up once more today for the one person who needs it.' },
   { name: 'The Sovereign', essence: 'You are the CEO already', glyph: '👑', image: 'images/18-sovereign.png',
-    why: 'You pulled this because you keep waiting to feel ready to lead this. Your whole incarnation cross is about rulership. The card came to tell you that you already are.',
-    message: 'You carry the Right Angle Cross of Rulership. Your soul came in to govern from the inside out and to teach others to do the same, to put down the victim and pick up their own authority. The woman who runs this business is not a future version of you, she is the one reading this now. Stop auditioning for a role you were born into. Choose as her.',
+    why: 'You pulled this because you keep waiting to feel ready to lead this. The card came to tell you that you already are.',
+    message: 'The woman who runs this business is not a future version of you. She is the one reading this right now. Stop auditioning for a role you were born into. Make the next choice as her.',
     practice: 'Make one choice today as the CEO, not the hobbyist waiting for permission.' },
   { name: 'The Weaver', essence: 'It all belongs together', glyph: '🕸', image: 'images/19-weaver.png',
-    why: 'This found you because the many threads of your work have felt tangled. Gate 45 gathers, Gate 26 names the value, and together they want to bring your people into one room. The card came to show you the design.',
-    message: 'You are not too many things, you are weaving. Gate 45 is the Gatherer, the part of you built to draw people around shared purpose. This is why your group containers, The Portal, the Spiritual Authority Circle, are not add-ons, they are the income structure your design is most built for. Every gift you hold is one thread in a cloth only you could make. Trust the pattern.',
+    why: 'This found you because the many threads of your work have felt tangled. The card came to show you the design.',
+    message: 'You are not too many things. You are weaving. Every gift you hold is a thread in one cloth that only you could make. The variety is not the problem to solve. It is the signature. Trust the pattern.',
     practice: 'Notice how two of your gifts secretly serve the same transformation.' },
   { name: 'The Dawn', essence: 'A new thing is beginning', glyph: '🌅', image: 'images/20-dawn.png',
-    why: 'You drew this because something is shifting that you cannot quite name. As a Generator, you do not need the whole map, you need the next thing to respond to. The card came to mark the turning.',
-    message: 'A new chapter is rising, and you do not need the full plan to begin. That is not your design anyway. The old way is loosening its grip. Wait for the next thing that lights up your sacral, take that one honest step, and let the path reveal itself as you respond your way forward.',
+    why: 'You drew this because something is shifting that you cannot quite name. The card came to mark the turning and tell you to take the next step.',
+    message: 'A new chapter is rising, and you do not need the whole map to begin. The old way is loosening its grip. Take one honest step and let the path reveal itself as you move.',
     practice: 'Take one small action today toward the thing that feels new and alive.' }
 ];
 
@@ -1358,6 +1484,49 @@ function resetPull() {
   }, 850);
 }
 
+
+/* ═══════════ AURAILIA EXPORT ═══════════
+   Builds a fresh HTML file that already contains the current checkmarks,
+   added/edited tasks, and status changes, so it can be pushed to GitHub
+   as the new source of truth. Reads the live in-memory state, rewrites
+   DEFAULT_TODO and DEFAULT_PROGRESS in a clone of this page, bakes the
+   checkmarks into a seed, and downloads the result. */
+function jsLiteral(obj) { return JSON.stringify(obj, null, 2); }
+function exportPortal() {
+  try {
+    var liveTodo = todoData;
+    var mergedProgress = {};
+    Object.keys(DEFAULT_PROGRESS).forEach(function(group) {
+      mergedProgress[group] = DEFAULT_PROGRESS[group].map(function(row) {
+        var key = group + '|' + row[0];
+        var status = statusOverrides[key] || row[1];
+        return [row[0], status];
+      });
+    });
+    var docHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    docHtml = docHtml.replace(/var DEFAULT_TODO = \{[\s\S]*?\n\};/, 'var DEFAULT_TODO = ' + jsLiteral(liveTodo) + ';');
+    docHtml = docHtml.replace(/var DEFAULT_PROGRESS = \{[\s\S]*?\n\};/, 'var DEFAULT_PROGRESS = ' + jsLiteral(mergedProgress) + ';');
+    var seed = '\n<script>(function(){try{var K="' + CLIENT_KEY + '";var seedChecks=' + jsLiteral(checks) + ';if(localStorage.getItem(K+"_checks")===null){localStorage.setItem(K+"_checks",JSON.stringify(seedChecks));}}catch(e){}})();<\/script>\n';
+    docHtml = docHtml.replace('</body>', seed + '</body>');
+    var blob = new Blob([docHtml], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    var stamp = new Date().toISOString().slice(0,10);
+    a.href = url; a.download = 'Rachael_Maly_Portal_' + stamp + '.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+    showToast('Downloaded ✦');
+  } catch (e) { alert('Export ran into a problem: ' + e.message); }
+}
+/* Show the export button for Aurailia: click the faint dot, or add #aurailia to the URL. */
+function toggleExport() { document.body.classList.toggle('show-export'); }
+function syncExportVisibility() {
+  if ((location.hash || '').toLowerCase().indexOf('aurailia') !== -1) {
+    document.body.classList.add('show-export');
+  }
+}
+window.addEventListener('hashchange', syncExportVisibility);
+syncExportVisibility();
 
 renderTodo();
 renderProgress();
